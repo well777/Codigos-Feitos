@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Animes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+            margin-top: 5px;
+        }
+        button {
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .edit {
+            background: blue;
+            color: white;
+        }
+        .delete {
+            background: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Cadastro de Animes</h2>
+    <input type="text" id="animeName" placeholder="Nome do anime">
+    <button onclick="addAnime()">Adicionar</button>
+    <ul id="animeList"></ul>
+
+    <script>
+        let animes = JSON.parse(localStorage.getItem("animes")) || [];
+        
+        function saveToLocalStorage() {
+            localStorage.setItem("animes", JSON.stringify(animes));
+        }
+
+        function renderList() {
+            const ul = document.getElementById("animeList");
+            ul.innerHTML = "";
+            animes.forEach((anime, index) => {
+                const li = document.createElement("li");
+                
+                const title = document.createElement("span");
+                title.textContent = anime.name;
+                
+                const img = document.createElement("img");
+                img.src = anime.image;
+                img.alt = anime.name;
+                
+                const editBtn = document.createElement("button");
+                editBtn.textContent = "Editar";
+                editBtn.classList.add("edit");
+                editBtn.onclick = function () {
+                    const newName = prompt("Editar anime:", anime.name);
+                    if (newName) {
+                        fetchAnimeImage(newName, index);
+                    }
+                };
+                
+                const removeBtn = document.createElement("button");
+                removeBtn.textContent = "Remover";
+                removeBtn.classList.add("delete");
+                removeBtn.onclick = function () {
+                    animes.splice(index, 1);
+                    saveToLocalStorage();
+                    renderList();
+                };
+                
+                li.appendChild(title);
+                li.appendChild(img);
+                li.appendChild(editBtn);
+                li.appendChild(removeBtn);
+                ul.appendChild(li);
+            });
+        }
+
+        function fetchAnimeImage(animeName, index = null) {
+            fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(animeName)}&limit=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.data.length > 0) {
+                        const imageUrl = data.data[0].images.jpg.image_url;
+                        if (index === null) {
+                            animes.push({ name: animeName, image: imageUrl });
+                        } else {
+                            animes[index] = { name: animeName, image: imageUrl };
+                        }
+                        saveToLocalStorage();
+                        renderList();
+                    } else {
+                        alert("Imagem não encontrada para esse anime.");
+                    }
+                })
+                .catch(error => console.error("Erro ao buscar imagem do anime:", error));
+        }
+
+        function addAnime() {
+            const inputName = document.getElementById("animeName");
+            const name = inputName.value.trim();
+            if (name === "") return;
+
+            fetchAnimeImage(name);
+            inputName.value = "";
+        }
+
+        renderList();
+    </script>
+</body>
+</html>
