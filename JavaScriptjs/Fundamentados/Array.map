@@ -1,0 +1,31 @@
+
+
+//2 
+
+const n1 = [1,2,3,4,5,6,7,8,10]
+const double = n1.map(n1 => n1*2)
+
+console.log(double)
+
+const nums = [10, 20, 30]
+const asString = nums.map(num => num.toString())
+console.log(asString)
+
+
+
+//3
+const m2 = [3, 6, 9]
+const dev = m2.map(m2 => m2+5)
+
+console.log(dev)
+
+// 4
+
+const user = [
+    { name: 'mario', age :26},
+    {name:'well', age : 32 },
+    { name: 'gabriel', age:29}
+    ]
+    
+const names = user.map(user => user.name)
+console.log(names)
