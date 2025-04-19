@@ -1,0 +1,43 @@
+// 01
+const my3FavoriteTVShows = ["Dark", "Breaking Bad", "The Office"];
+
+const sentence = `Minhas 3 séries favoritas são: ${my3FavoriteTVShows.slice(0, -1).join(', ')} e ${my3FavoriteTVShows.slice(-1)}.`;
+
+console.log(sentence); 
+
+const hasThreeItems = my3FavoriteTVShows.length === 3;
+console.log(hasThreeItems); 
+
+const randomTVShow = 'Watchmen';
+const isRandomTVShowIncluded = my3FavoriteTVShows.includes(randomTVShow);
+console.log(isRandomTVShowIncluded); // 
+const typeSentence = `O tipo de dado que a const "isRandomTVShowIncluded" armazena é: ${typeof isRandomTVShowIncluded}.`;
+console.log(typeSentence);
+
+const characterLimit = 39;
+const isLongerThanLimit = typeSentence.length > characterLimit;
+const isLongerStr = String(isLongerThanLimit).replace(/^./, (char) => char.toUpperCase());
+console.log(`A string que a "typeSentence" armazena tem mais de ${characterLimit} caracteres? ${isLongerStr}.`);
+
+
+const falsyValues = [0, "", false, '', ``, null, undefined, NaN];
+console.log(`Todos os ${falsyValues.length} itens do array "falsyValues" são falsy. Inclusive o ${Boolean(falsyValues[2])}.`);
+
+
+const crazyOperation = null + 1; 
+const crazyConversion = Boolean(crazyOperation); 
+console.log(crazyConversion); 
+
+const ages = [31, 82, 61, 11];
+const agesSum = ages[0] + ages[2]; 
+console.log(`A soma entre o 1º e o 3º item de "ages" é menor ou igual a 92. Essa afirmação é: ${agesSum <= 92}.`);
+
+
+const isNotAString = typeof randomTVShow !== 'string';
+console.log(isNotAString); 
+
+const evenNumbers = [0, 2, 4, 6, 8, 10];
+const hasEight = evenNumbers.indexOf(8) !== -1;
+console.log(hasEight); 
+
+    
