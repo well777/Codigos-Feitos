@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cartão Interativo</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .cartao {
+      width: 400px;
+      height: 250px;
+      perspective: 1000px;
+      margin-bottom: 30px;
+    }
+
+    .cartao-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .cartao.flipped .cartao-inner {
+      transform: rotateY(180deg);
+    }
+
+    .cartao-frente, .cartao-verso {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .cartao-frente {
+      background: url('cartao-pagbank.webp') no-repeat center;
+      background-size: cover;
+      color: rgb(23, 122, 61);
+    }
+
+    .cartao-verso {
+      background-color: #488ae0;
+      color: rgb(43, 113, 243);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .dados-cartao {
+      position: absolute;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+    }
+
+    .numero {
+      bottom: 90px;
+      left: 40px;
+      font-size: 22px;
+    }
+
+    .validade {
+      bottom: 50px;
+      left: 40px;
+    }
+
+    .titular {
+      bottom: 25px;
+      left: 40px;
+    }
+
+    .cvv {
+      font-size: 22px;
+      margin-top: 10px;
+    }
+
+    .formulario {
+      max-width: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, button {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #00c853;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #00b248;
+    }
+
+    .flip-btn {
+      background-color: #2196f3;
+    }
+
+    .flip-btn:hover {
+      background-color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cartao" id="cartao">
+    <div class="cartao-inner">
+      <!-- Frente do cartão -->
+      <div class="cartao-frente">
+        <div class="dados-cartao numero" id="numCartao">1234 5678 9101 7788</div>
+        <div class="dados-cartao validade" id="validadeCartao">08/23</div>
+        <div class="dados-cartao titular" id="titularCartao">RODRIGO C PEREIRA</div>
+      </div>
+
+      <!-- Verso do cartão -->
+      <div class="cartao-verso">
+        <h3>CVV</h3>
+        <div class="cvv" id="cvvCartao">123</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="flip-btn" onclick="girarCartao()">Girar Cartão</button>
+
+  <form class="formulario" onsubmit="atualizarCartao(event)">
+    <input type="text" id="novoNumero" placeholder="Número do cartão" maxlength="19">
+    <input type="text" id="novaValidade" placeholder="Validade (MM/AA)">
+    <input type="text" id="novoTitular" placeholder="Nome do titular">
+    <input type="text" id="novoCVV" placeholder="CVV (3 dígitos)" maxlength="3">
+    <button type="submit">Atualizar Cartão</button>
+  </form>
+
+  <script>
+    function girarCartao() {
+      const cartao = document.getElementById("cartao");
+      cartao.classList.toggle("flipped");
+    }
+
+    function atualizarCartao(event) {
+      event.preventDefault();
+
+      const numero = document.getElementById('novoNumero').value;
+      const validade = document.getElementById('novaValidade').value;
+      const titular = document.getElementById('novoTitular').value;
+      const cvv = document.getElementById('novoCVV').value;
+
+      if (numero) document.getElementById('numCartao').textContent = numero;
+      if (validade) document.getElementById('validadeCartao').textContent = validade;
+      if (titular) document.getElementById('titularCartao').textContent = titular.toUpperCase();
+      if (cvv) document.getElementById('cvvCartao').textContent = cvv;
+    }
+  </script>
+
+</body>
+</html>
+s

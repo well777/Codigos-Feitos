@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cartão de Crédito</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      padding: 30px;
+      width: 350px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .info {
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .info p {
+      margin: 5px 0;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .secondary {
+      background-color: #007bff;
+      margin-top: 10px;
+    }
+
+    .secondary:hover {
+      background-color: #0056b3;
+    }
+
+    .msg {
+      margin-top: 10px;
+      text-align: center;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Cartão de Crédito</h2>
+    <div class="info" id="infoCartao"></div>
+
+    <div class="form-group">
+      <input type="number" id="valorCompra" placeholder="Valor da compra (R$)">
+      <button onclick="fazerCompra()">Fazer Compra</button>
+    </div>
+
+    <div class="form-group">
+      <input type="number" id="valorPagamento" placeholder="Valor do pagamento (R$)">
+      <button class="secondary" onclick="pagarFatura()">Pagar Fatura</button>
+    </div>
+
+    <div class="msg" id="mensagem"></div>
+  </div>
+
+  <script>
+    const cartao = {
+      titular: "Wellington Silva",
+      numero: "1234 5678 9012 3456",
+      validade: "04/30",
+      limite: 3000,
+      saldoDisponivel: 3000,
+      faturaAtual: 0
+    };
+
+    function atualizarInterface() {
+      document.getElementById("infoCartao").innerHTML = `
+        <p><strong>Titular:</strong> ${cartao.titular}</p>
+        <p><strong>Número:</strong> ${cartao.numero}</p>
+        <p><strong>Validade:</strong> ${cartao.validade}</p>
+        <p><strong>Limite:</strong> R$ ${cartao.limite.toFixed(2)}</p>
+        <p><strong>Saldo Disponível:</strong> R$ ${cartao.saldoDisponivel.toFixed(2)}</p>
+        <p><strong>Fatura Atual:</strong> R$ ${cartao.faturaAtual.toFixed(2)}</p>
+      `;
+    }
+
+    function fazerCompra() {
+      const valor = parseFloat(document.getElementById("valorCompra").value);
+      const msg = document.getElementById("mensagem");
+
+      if (!valor || valor <= 0) {
+        msg.textContent = "Digite um valor válido para a compra.";
+        return;
+      }
+
+      if (valor > cartao.saldoDisponivel) {
+        msg.textContent = "Saldo insuficiente para essa compra.";
+      } else {
+        cartao.saldoDisponivel -= valor;
+        cartao.faturaAtual += valor;
+        msg.textContent = `Compra de R$ ${valor.toFixed(2)} realizada com sucesso!`;
+        atualizarInterface();
+      }
+    }
+
+    function pagarFatura() {
+      const valor = parseFloat(document.getElementById("valorPagamento").value);
+      const msg = document.getElementById("mensagem");
+
+      if (!valor || valor <= 0) {
+        msg.textContent = "Digite um valor válido para o pagamento.";
+        return;
+      }
+
+      cartao.faturaAtual -= valor;
+      if (cartao.faturaAtual < 0) cartao.faturaAtual = 0;
+
+      cartao.saldoDisponivel += valor;
+      if (cartao.saldoDisponivel > cartao.limite) cartao.saldoDisponivel = cartao.limite;
+
+      msg.textContent = `Pagamento de R$ ${valor.toFixed(2)} efetuado com sucesso!`;
+      atualizarInterface();
+    }
+
+    atualizarInterface();
+  </script>
+</body>
+</html>
